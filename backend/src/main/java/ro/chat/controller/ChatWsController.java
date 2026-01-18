@@ -56,11 +56,8 @@ public class ChatWsController {
         out.setType("LEAVE");
         out.setTimestamp(Instant.now().toString());
         out.setText(from + " left");
-
-        // broadcast leave event
         messagingTemplate.convertAndSend("/topic/room." + room, out);
 
-        // update presence + broadcast users
         var users = presenceService.leave(room, from);
         messagingTemplate.convertAndSend("/topic/presence." + room, users);
     }
@@ -78,10 +75,8 @@ public class ChatWsController {
         out.setTimestamp(Instant.now().toString());
         out.setText(text);
 
-        // persist message
         messageService.save(room, from, text, Instant.parse(out.getTimestamp()));
 
-        // broadcast chat message
         messagingTemplate.convertAndSend("/topic/room." + room, out);
     }
 

@@ -28,7 +28,6 @@ public class MessageService {
     public List<MessageResponse> findLatest(String room, int limit) {
         int safeLimit = Math.min(Math.max(limit, 1), 200);
 
-        // DB returnează desc; pentru UI vrem asc
         var list = repo.findByRoomOrderByCreatedAtDesc(room, PageRequest.of(0, safeLimit));
         Collections.reverse(list);
 

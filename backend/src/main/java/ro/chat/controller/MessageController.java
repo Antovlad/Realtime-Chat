@@ -16,14 +16,11 @@ public class MessageController {
     public MessageController(MessageService messageService) {
         this.messageService = messageService;
     }
-
-    // test endpoint
     @GetMapping("/ping")
     public String ping() {
         return "ok";
     }
 
-    // history endpoint
     @GetMapping("/{room}/messages")
     public List<MessageResponse> history(
             @PathVariable String room,
