@@ -49,6 +49,6 @@ export function sendChat(client, room, from, text) {
 
 export function subscribePresence(client, room, cb) {
   return client.subscribe(`/topic/presence.${room}`, (message) => {
-    cb(JSON.parse(message.body)); // list of usernames
+    cb(JSON.parse(message.body));
   });
 }

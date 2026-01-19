@@ -37,10 +37,8 @@ public class ChatWsController {
         out.setTimestamp(Instant.now().toString());
         out.setText(from + " joined");
 
-        // broadcast join event
         messagingTemplate.convertAndSend("/topic/room." + room, out);
 
-        // update presence + broadcast users
         var users = presenceService.join(room, from);
         messagingTemplate.convertAndSend("/topic/presence." + room, users);
     }

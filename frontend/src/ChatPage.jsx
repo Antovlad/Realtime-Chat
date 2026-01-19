@@ -37,7 +37,7 @@ export default function ChatPage() {
     return connected && username.trim() && room.trim() && text.trim();
   }, [connected, username, room, text]);
 
-  // connect once
+  
   useEffect(() => {
     const client = createStompClient({
       onConnect: () => setConnected(true),
@@ -58,7 +58,7 @@ export default function ChatPage() {
     };
   }, []);
 
-  // subscribe + history + join/leave when room changes
+ 
   useEffect(() => {
     if (!connected) return;
 
@@ -72,11 +72,11 @@ export default function ChatPage() {
 
     setError("");
 
-    // reset UI for new room
+    
     setMessages([]);
     setOnline([]);
 
-    // unsubscribe previous
+    
     try {
       roomSubRef.current?.unsubscribe?.();
     } catch {}
@@ -86,10 +86,9 @@ export default function ChatPage() {
     roomSubRef.current = null;
     presenceSubRef.current = null;
 
-    // load history (REST)
+    
     fetchHistory(r, 50)
       .then((hist) => {
-        // hist: [{id, room, from, text, timestamp}]
         const mapped = (hist || []).map((m) => ({
           room: m.room,
           from: m.from,
@@ -103,21 +102,17 @@ export default function ChatPage() {
         setError(e.message || String(e));
       });
 
-    // subscribe room messages
     roomSubRef.current = subscribeRoom(client, r, (msg) => {
       setMessages((prev) => [...prev, msg]);
     });
 
-    // subscribe presence
     presenceSubRef.current = subscribePresence(client, r, (users) => {
       setOnline(users || []);
     });
 
-    // join event (broadcast + presence update)
     sendJoin(client, r, u);
 
     return () => {
-      // on cleanup, leave old room
       try {
         sendLeave(client, r, u);
       } catch {}
@@ -130,7 +125,6 @@ export default function ChatPage() {
       roomSubRef.current = null;
       presenceSubRef.current = null;
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [connected, room, username]);
 
   function onSend(e) {
@@ -168,7 +162,6 @@ export default function ChatPage() {
       )}
 
       <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr", gap: 14, alignItems: "start" }}>
-        {/* LEFT: session + presence */}
         <div style={{ border: "1px solid #eee", borderRadius: 14, padding: 14 }}>
           <h2 style={{ marginTop: 0 }}>Session</h2>
 
@@ -205,7 +198,6 @@ export default function ChatPage() {
           </div>
         </div>
 
-        {/* RIGHT: messages */}
         <div style={{ border: "1px solid #eee", borderRadius: 14, padding: 14 }}>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
             <h2 style={{ marginTop: 0, marginBottom: 0 }}>Room: {room.trim() || "(empty)"}</h2>

@@ -1,4 +1,3 @@
-// polyfill (dacă ai pus varianta cu polyfills.js, import-o aici; altfel ignoră)
 import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
